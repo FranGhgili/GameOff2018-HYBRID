@@ -9,8 +9,6 @@ public class playerMovement : MonoBehaviour {
 	public float speed;
 	public float jumpSpeed;
 	public bool isGrounded;
-	public cameraMovement cam;
-
 	public void Start(){
 	
 		rb = GetComponent<Rigidbody> ();
@@ -20,22 +18,19 @@ public class playerMovement : MonoBehaviour {
 	public void Update(){
 	
 		float movX = Input.GetAxisRaw("Horizontal") * speed;
-		float movZ = Input.GetAxisRaw ("Vertical") * speed;
 		float jump = Input.GetAxisRaw ("Jump") * jumpSpeed;
 
-		rb.velocity = transform.forward * movZ + transform.right * movX;
+        if (isGrounded && Input.GetKey(KeyCode.Space))
+        {
 
+            rb.AddForce(Vector3.up * jump);
+            isGrounded = false;
 
-		if (isGrounded && Input.GetKey (KeyCode.Space)) {
+        }
 
-			rb.velocity = new Vector3 (0, jump, 0);
-			isGrounded = false;
+        rb.AddForce  (Vector3.right * movX);
 
-		}
-
-		transform.rotation = new Quaternion (0, cam.gameObject.transform.rotation.y, 0, 1);
-
-	}
+    }
 
 	public void OnCollisionEnter(Collision other){
 
